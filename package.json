@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
