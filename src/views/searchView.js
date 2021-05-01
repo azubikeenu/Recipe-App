@@ -2,6 +2,21 @@ import { elements } from './base'
 
 export const getInput = () => elements.searchField.value
 
+const limitRecipeTitle = ( title, limit = 17 ) => {
+    const newTitle = [];
+    if ( title.length > limit ) {
+        title.split( ' ' ).reduce( ( acc, curr ) => {
+            if ( curr.length + acc <= limit ) {
+                newTitle.push( curr );
+            }
+            return acc + curr.length;
+        }, 0 )
+
+        return `${newTitle.join( ' ' )} ...`
+    }
+    return title;
+}
+
 export const clearInput = () => {
     elements.searchField.value = ""
 }
@@ -16,15 +31,6 @@ export const renderResult = ( recipes ) => {
 
 }
 
-`
-image_url: "http://forkify-api.herokuapp.com/images/best_pizza_dough_recipe1b20.jpg"
-publisher: "101 Cookbooks"
-publisher_url: "http://www.101cookbooks.com"
-recipe_id: "47746"
-social_rank: 100
-source_url: "http://www.101cookbooks.com/archives/001199.html"
-title: "Best Pizza Dough Ever"
-`
 const renderRecipe = ( { image_url, publisher, title, recipe_id } ) => {
     const markup =
         `  <li>
@@ -33,7 +39,7 @@ const renderRecipe = ( { image_url, publisher, title, recipe_id } ) => {
                 <img src="${image_url}" alt="Test">
             </figure>
             <div class="results__data">
-                <h4 class="results__name">${title}</h4>
+                <h4 class="results__name">${limitRecipeTitle( title )}</h4>
                 <p class="results__author">${publisher}</p>
             </div>
         </a>
