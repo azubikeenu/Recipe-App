@@ -2,7 +2,9 @@ export const elements = {
     searchField: document.querySelector( '.search__field' ),
     searchForm: document.querySelector( '.search' ),
     searchResultList: document.querySelector( '.results__list' ),
-    results: document.querySelector( '.results' )
+    results: document.querySelector( '.results' ),
+    paginationContainer: document.querySelector( '.results__pages' ),
+    loader: document.querySelector( `.loader` )
 
 }
 

@@ -19,9 +19,7 @@ const searchCtrl = async () => {
     const query = searchView.getInput();
     if ( query ) {
         state.search = new Search( query );
-
         // prepare the UI for the result
-
         searchView.clearResults();
 
         renderLoader( elements.results );
@@ -35,16 +33,24 @@ const searchCtrl = async () => {
         removeLoader();
 
         searchView.renderResult( state.search.result )
+
     }
-
-    // pass it into the Search Object
-
-    // get search result
 
 }
 
-elements.searchForm.addEventListener( 'submit', ( e ) => {
+// add event listener for search form
+elements.searchForm.addEventListener( 'submit', e => {
     e.preventDefault();
     searchCtrl();
 
+} )
+
+// add event listener for pagination
+elements.paginationContainer.addEventListener( 'click', e => {
+    const btn = e.target.closest( '.btn-inline' )
+    searchView.clearResults();
+    if ( btn ) {
+        const page = parseInt( btn.dataset.value, 10 );
+        searchView.renderResult( state.search.result, page );
+    }
 } )

@@ -15,7 +15,7 @@ export default class Search {
             return this.result;
 
         } catch ( err ) {
-            throw new Error( err )
+            alert( err )
         }
 
 

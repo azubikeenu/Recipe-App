@@ -24,10 +24,41 @@ export const clearInput = () => {
 export const clearResults = () => {
     clearInput();
     elements.searchResultList.innerHTML = "";
+    elements.paginationContainer.innerHTML = '';
 }
 
-export const renderResult = ( recipes ) => {
-    recipes.forEach( renderRecipe );
+const createButton = ( page, type ) => {
+
+    return `<button class="btn-inline results__btn--${type}" data-value='${page}'>
+            <svg class="search__icon">
+                <use href="img/icons.svg#icon-triangle-${( type === 'prev' ? "left" : "right" )}"></use>
+            </svg>
+            <span>Page ${page}</span>
+            </button>`
+}
+
+const renderPagination = ( page, numberOfResults, itemsPerPage ) => {
+    let button;
+    const totalNumberOfPages = Math.ceil( numberOfResults / itemsPerPage );
+    if ( page === 1 && numberOfResults > itemsPerPage ) {
+        button = createButton( page + 1, 'next' );
+    }
+    else if ( page > 1 && page < totalNumberOfPages ) {
+        button = `${createButton( page - 1, 'prev' )}${createButton( page + 1, 'next' )}`
+    } else if ( page === totalNumberOfPages ) {
+        button = createButton( page - 1, 'prev' );
+    }
+    elements.paginationContainer.insertAdjacentHTML( 'afterbegin', button );
+
+
+}
+
+export const renderResult = ( recipes, page = 2, itemsPerPage = 10 ) => {
+    const start = ( page - 1 ) * itemsPerPage;
+    const end = page * itemsPerPage;
+    recipes.slice( start, end ).forEach( renderRecipe );
+    // render pagination buttons
+    renderPagination( page, recipes.length, itemsPerPage );
 
 }
 
