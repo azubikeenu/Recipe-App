@@ -20,26 +20,25 @@ const state = {}
 const searchCtrl = async () => {
 
     // get the query from the view
-    const query = searchView.getInput();
+    // const query = searchView.getInput();
+    // TESTING
+    const query = 'pizza';
+
     if ( query ) {
         state.search = new Search( query );
         // prepare the UI for the result
         searchView.clearResults();
-
         renderLoader( elements.results );
-
-        await state.search.getResults();
-
-        console.log( state.search.result );
-
-        // Render the result to the UI
-
-        removeLoader();
-
-        searchView.renderResult( state.search.result )
+        try {
+            await state.search.getResults();
+            // Render the result to the UI
+            removeLoader();
+            searchView.renderResult( state.search.result );
+        } catch ( err ) {
+            console.log( "Something went wrong!!" )
+        }
 
     }
-
 }
 
 
@@ -53,28 +52,30 @@ const recipeCtrl = async () => {
 
 
         // create the recipe object
+
         state.recipe = new Recipe( id );
 
         // get the recipie data
 
-        await state.recipe.getRecipe();
+        try {
+            await state.recipe.getRecipe();
+            console.log( state.recipe.ingredients )
+            state.recipe.parseIngredients()
+            console.log( state.recipe.ingredients )
+            // calculate recipie methods
+            state.recipe.calcTime();
 
-        // calculate recipie methods
-        state.recipe.calcTime();
+            state.recipe.calcServings();
 
-        state.recipe.calcServings();
+            // render the recipe to the UI
 
-        // render the recipe to the UI
-        console.log( state.recipe )
+        } catch ( err ) {
+            console.log( err )
+        }
+
     }
 
-
-
-
 }
-
-
-
 
 
 ///----- Event Listeners------------//////
@@ -83,8 +84,10 @@ const recipeCtrl = async () => {
 elements.searchForm.addEventListener( 'submit', e => {
     e.preventDefault();
     searchCtrl();
-
 } )
+
+// TESTING
+window.addEventListener( 'load', searchCtrl )
 
 // add event listener for pagination
 elements.paginationContainer.addEventListener( 'click', e => {
@@ -96,9 +99,9 @@ elements.paginationContainer.addEventListener( 'click', e => {
     }
 } )
 
+// add event listener for hashchange and load
 
-// add event listener for the hashchange
-window.addEventListener( 'hashchange', recipeCtrl );
-
-// add event listener on pageload
-window.addEventListener( 'load', recipeCtrl )
+const arrElements = ['hashchange', 'load'];
+arrElements.forEach( el => {
+    window.addEventListener( el, recipeCtrl )
+} );

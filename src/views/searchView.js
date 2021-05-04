@@ -53,7 +53,7 @@ const renderPagination = ( page, numberOfResults, itemsPerPage ) => {
 
 }
 
-export const renderResult = ( recipes, page = 2, itemsPerPage = 10 ) => {
+export const renderResult = ( recipes, page = 1, itemsPerPage = 10 ) => {
     const start = ( page - 1 ) * itemsPerPage;
     const end = page * itemsPerPage;
     recipes.slice( start, end ).forEach( renderRecipe );
