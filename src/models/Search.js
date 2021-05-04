@@ -12,7 +12,7 @@ export default class Search {
                 }
             } );
             this.result = res.data.recipes;
-            return this.result;
+            //return this.result;
 
         } catch ( err ) {
             alert( err )

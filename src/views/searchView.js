@@ -30,10 +30,10 @@ export const clearResults = () => {
 const createButton = ( page, type ) => {
 
     return `<button class="btn-inline results__btn--${type}" data-value='${page}'>
+    <span>Page ${page}</span>
             <svg class="search__icon">
                 <use href="img/icons.svg#icon-triangle-${( type === 'prev' ? "left" : "right" )}"></use>
             </svg>
-            <span>Page ${page}</span>
             </button>`
 }
 
@@ -65,7 +65,7 @@ export const renderResult = ( recipes, page = 2, itemsPerPage = 10 ) => {
 const renderRecipe = ( { image_url, publisher, title, recipe_id } ) => {
     const markup =
         `  <li>
-        <a class="results__link" href="${recipe_id}">
+        <a class="results__link" href="#${recipe_id}">
             <figure class="results__fig">
                 <img src="${image_url}" alt="Test">
             </figure>
