@@ -1,6 +1,7 @@
 import Search from '../models/Search'
 import { elements, renderLoader, removeLoader } from '../views/base'
 import * as searchView from '../views/searchView'
+import * as recipeView from '../views/recipeView'
 import Recipe from '../models/Recipe';
 
 /**
@@ -49,25 +50,29 @@ const recipeCtrl = async () => {
     const id = window.location.hash.slice( 1 );
     if ( id ) {
         // prepare the UI for changes
-
+        recipeView.clearResults()
+        renderLoader( elements.recipeContainer )
 
         // create the recipe object
 
         state.recipe = new Recipe( id );
 
+
+
         // get the recipie data
 
         try {
             await state.recipe.getRecipe();
-            console.log( state.recipe.ingredients )
             state.recipe.parseIngredients()
-            console.log( state.recipe.ingredients )
             // calculate recipie methods
             state.recipe.calcTime();
-
             state.recipe.calcServings();
-
             // render the recipe to the UI
+            removeLoader();
+            recipeView.renderRecipe( state.recipe );
+            // highlight selected
+
+            if ( state.search ) recipeView.recipieSelected( state.recipe.id )
 
         } catch ( err ) {
             console.log( err )
@@ -92,10 +97,12 @@ window.addEventListener( 'load', searchCtrl )
 // add event listener for pagination
 elements.paginationContainer.addEventListener( 'click', e => {
     const btn = e.target.closest( '.btn-inline' )
-    searchView.clearResults();
+
     if ( btn ) {
+        searchView.clearResults();
         const page = parseInt( btn.dataset.value, 10 );
         searchView.renderResult( state.search.result, page );
+
     }
 } )
 
@@ -105,3 +112,14 @@ const arrElements = ['hashchange', 'load'];
 arrElements.forEach( el => {
     window.addEventListener( el, recipeCtrl )
 } );
+
+
+// handling servings button
+elements.recipeContainer.addEventListener( 'click', e => {
+    if ( e.target.matches( '.btn-decrease, .btn-decrease *' ) ) {
+        state.recipe.updateServings( 'dec' )
+    } else if ( e.target.matches( '.btn-increase, .btn-increase *' ) ) {
+        state.recipe.updateServings( 'inc' )
+    }
+    recipeView.modifyIngredients( state.recipe );
+} )
