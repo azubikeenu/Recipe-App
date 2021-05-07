@@ -3,8 +3,10 @@ import { elements, renderLoader, removeLoader } from '../views/base'
 import * as searchView from '../views/searchView'
 import * as recipeView from '../views/recipeView'
 import * as listView from '../views/listView'
+import * as likesView from '../views/likesView'
 import Recipe from '../models/Recipe';
 import List from '../models/List';
+import Likes from '../models/Likes'
 
 
 /**
@@ -66,7 +68,7 @@ const recipeCtrl = async () => {
             state.recipe.calcServings();
             // render the recipe to the UI
             removeLoader();
-            recipeView.renderRecipe( state.recipe );
+            recipeView.renderRecipe( state.recipe, state.likes.isLiked( id ) );
             // highlight selected
             if ( state.search ) recipeView.recipieSelected( state.recipe.id )
 
@@ -84,8 +86,20 @@ const listCtrl = () => {
     state.recipe.ingredients.forEach( ( { count, ingredient, unit } ) => state.list.addItem( count, unit, ingredient ) )
     // render the ingredients
     listView.renderList( state.list )
+}
 
-
+state.likes = new Likes();
+//----------Likes Controller----------------//
+const likeCtrl = () => {
+    const { id, author, image, title } = state.recipe;
+    if ( !state.likes ) state.likes = new Likes();
+    if ( !state.likes.isLiked( id ) ) {
+        //add to the list of liked items
+        state.likes.addLike( id, title, author, image );
+    } else {
+        state.likes.removeLike( id )
+    }
+    likesView.toggleLiked( state.likes.isLiked( id ) );
 }
 
 
@@ -111,7 +125,6 @@ elements.paginationContainer.addEventListener( 'click', e => {
 } )
 
 // add event listener for hashchange and load
-
 const arrElements = ['hashchange', 'load'];
 arrElements.forEach( el => {
     window.addEventListener( el, recipeCtrl )
@@ -122,10 +135,14 @@ arrElements.forEach( el => {
 elements.recipeContainer.addEventListener( 'click', e => {
     if ( e.target.matches( '.btn-decrease, .btn-decrease *' ) ) {
         state.recipe.updateServings( 'dec' )
+        recipeView.modifyIngredients( state.recipe );
     } else if ( e.target.matches( '.btn-increase, .btn-increase *' ) ) {
         state.recipe.updateServings( 'inc' )
+        recipeView.modifyIngredients( state.recipe );
+    } else if ( e.target.matches( '.recipe__love ,.recipe__love *' ) ) {
+        likeCtrl();
     }
-    recipeView.modifyIngredients( state.recipe );
+
 } )
 
 

@@ -18,7 +18,7 @@ export const renderList = ( list ) => {
            `
     } ).join( '\n' )
 
-    elements.shoppingList.insertAdjacentHTML( 'beforeend', markup )
+    elements.shoppingList.insertAdjacentHTML( 'afterbegin', markup )
 
 
 }
