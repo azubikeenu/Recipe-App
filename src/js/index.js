@@ -9,20 +9,10 @@ import List from '../models/List';
 import Likes from '../models/Likes'
 
 
-/**
- * The global state contains
- *-- The Search Object
-     The Recipe Object
-     The Likes Object
-     The Shopping List
- */
-
 // global state
 const state = {}
 
-
 //----Search Controller-------//
-
 const searchCtrl = async () => {
 
     const query = searchView.getInput();
@@ -100,7 +90,6 @@ const likeCtrl = () => {
     likesView.toggleLikesMenu( state.likes.numberOfLikes() )
     likesView.clearLikesPanel()
     likesView.showLikesInPanel( state.likes )
-
 }
 
 // restore liked recipes on page load
@@ -122,7 +111,6 @@ elements.searchForm.addEventListener( 'submit', e => {
     e.preventDefault();
     searchCtrl();
 } )
-
 
 // add event listener for pagination
 elements.paginationContainer.addEventListener( 'click', e => {
@@ -152,9 +140,7 @@ elements.recipeContainer.addEventListener( 'click', e => {
     } else if ( e.target.matches( '.recipe__love ,.recipe__love *' ) ) {
         likeCtrl();
     }
-
 } )
-
 
 // handling add items to the list
 elements.recipeContainer.addEventListener( 'click', e => {
@@ -173,5 +159,4 @@ elements.shoppingList.addEventListener( 'click', e => {
         const { value } = e.target.closest( '.item__count' );
         state.list.updateCount( id, parseFloat( value ) )
     }
-
 } )
