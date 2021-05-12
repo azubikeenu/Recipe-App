@@ -117,8 +117,11 @@ export const renderRecipe = ( recipe, isLiked ) => {
 }
 
 export const recipieSelected = ( id ) => {
-    Array.from( document.querySelectorAll( '.results__link' ) ).forEach( link => link.classList.remove( "results__link--active" ) );
-    document.querySelector( `a[href="#${id}"]` ).classList.add( "results__link--active" );
+    if ( document.querySelectorAll( '.results__link' ) ) {
+        Array.from( document.querySelectorAll( '.results__link' ) ).forEach( link => link.classList.remove( "results__link--active" ) );
+        document.querySelector( `.results__list [href="#${id}"]` ).classList.add( "results__link--active" );
+    }
+
 }
 
 

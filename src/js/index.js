@@ -25,11 +25,7 @@ const state = {}
 
 const searchCtrl = async () => {
 
-    // get the query from the view
-    // const query = searchView.getInput();
-    // TESTING
-    const query = 'pizza';
-
+    const query = searchView.getInput();
     if ( query ) {
         state.search = new Search( query );
         // prepare the UI for the result
@@ -88,8 +84,7 @@ const listCtrl = () => {
     listView.renderList( state.list )
 }
 
-state.likes = new Likes();
-likesView.toggleLikesMenu( state.likes.numberOfLikes() )
+
 //----------Likes Controller----------------//
 const likeCtrl = () => {
     const { id, author, image, title } = state.recipe;
@@ -108,6 +103,17 @@ const likeCtrl = () => {
 
 }
 
+// restore liked recipes on page load
+
+window.addEventListener( 'load', e => {
+    state.likes = new Likes();
+    state.likes.getLikes()
+    likesView.toggleLikesMenu( state.likes.numberOfLikes() )
+    likesView.clearLikesPanel()
+    likesView.showLikesInPanel( state.likes )
+
+} )
+
 
 ///----- Event Listeners------------//////
 
@@ -117,8 +123,6 @@ elements.searchForm.addEventListener( 'submit', e => {
     searchCtrl();
 } )
 
-// TESTING
-window.addEventListener( 'load', searchCtrl )
 
 // add event listener for pagination
 elements.paginationContainer.addEventListener( 'click', e => {
