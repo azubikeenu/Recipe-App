@@ -5,7 +5,8 @@ export const elements = {
     results: document.querySelector( '.results' ),
     paginationContainer: document.querySelector( '.results__pages' ),
     recipeContainer: document.querySelector( '.recipe' ),
-    shoppingList: document.querySelector( '.shopping__list' )
+    shoppingList: document.querySelector( '.shopping__list' ),
+    likesList: document.querySelector( '.likes__list' )
 
 
 }

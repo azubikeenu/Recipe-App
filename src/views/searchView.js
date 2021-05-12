@@ -2,7 +2,7 @@ import { elements } from './base'
 
 export const getInput = () => elements.searchField.value
 
-const limitRecipeTitle = ( title, limit = 17 ) => {
+export const limitRecipeTitle = ( title, limit = 17 ) => {
     const newTitle = [];
     if ( title.length > limit ) {
         title.split( ' ' ).reduce( ( acc, curr ) => {

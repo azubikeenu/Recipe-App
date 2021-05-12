@@ -89,6 +89,7 @@ const listCtrl = () => {
 }
 
 state.likes = new Likes();
+likesView.toggleLikesMenu( state.likes.numberOfLikes() )
 //----------Likes Controller----------------//
 const likeCtrl = () => {
     const { id, author, image, title } = state.recipe;
@@ -97,9 +98,14 @@ const likeCtrl = () => {
         //add to the list of liked items
         state.likes.addLike( id, title, author, image );
     } else {
+        // remove from the list of liked items
         state.likes.removeLike( id )
     }
     likesView.toggleLiked( state.likes.isLiked( id ) );
+    likesView.toggleLikesMenu( state.likes.numberOfLikes() )
+    likesView.clearLikesPanel()
+    likesView.showLikesInPanel( state.likes )
+
 }
 
 
